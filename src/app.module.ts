@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
 
 
 @Module({
@@ -13,9 +15,10 @@ import { User } from './users/entities/user.entity';
       type: 'sqlite',
       database: 'db/sql',
       synchronize: true,
-      entities: [User],
+      entities: [User, Category],
     }),
-    UsersModule],
+    UsersModule,
+    CategoriesModule],
   controllers: [AppController],
   providers: [AppService],
 })

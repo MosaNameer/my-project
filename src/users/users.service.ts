@@ -9,15 +9,15 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private userRepository: Repository<User>,
   ) { }
 
   async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+    return this.userRepository.find();
   }
 
   async findOne(id: number) {
-    const user = this.usersRepository.findOne({ where: { id } });
+    const user = this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -25,19 +25,19 @@ export class UsersService {
   }
 
   async create(dto: CreateUserDto) {
-    const newUser = this.usersRepository.create({
+    const newUser = this.userRepository.create({
       ...dto,
     });
-    return await this.usersRepository.save(newUser);
+    return await this.userRepository.save(newUser);
   }
 
   async update(id: number, user: Partial<User>): Promise<User> {
-    await this.usersRepository.update(id, user);
-    return this.usersRepository.findOne({ where: { id } });
+    await this.userRepository.update(id, user);
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async remove(id: number) {
     const menu = await this.findOne(id);
-    return await this.usersRepository.remove(menu);
+    return await this.userRepository.remove(menu);
   }
 }
