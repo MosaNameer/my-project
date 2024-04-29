@@ -24,15 +24,16 @@ export class UsersService {
     return user;
   }
 
-  async create(createMenuDto: CreateUserDto): Promise<User> {
-    const menu = this.usersRepository.create(createMenuDto);
-    return await this.usersRepository.save(menu);
+  async create(dto: CreateUserDto) {
+    const newUser = this.usersRepository.create({
+      ...dto,
+    });
+    return await this.usersRepository.save(newUser);
   }
 
-  async update(id: number, updateMenuDto: UpdateUserDto): Promise<User> {
-    const menu = await this.findOne(id);
-    Object.assign(menu, updateMenuDto);
-    return await this.usersRepository.save(menu);
+  async update(id: number, user: Partial<User>): Promise<User> {
+    await this.usersRepository.update(id, user);
+    return this.usersRepository.findOne({ where: { id } });
   }
 
   async remove(id: number) {
