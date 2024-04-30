@@ -17,11 +17,11 @@ export class CategoriesService {
   }
 
   async findOne(id: number) {
-    const user = this.categoryRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException('User not found');
+    const category = this.categoryRepository.findOne({ where: { id } });
+    if (!category) {
+      throw new NotFoundException('Category not found');
     }
-    return user;
+    return category;
   }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
@@ -29,8 +29,8 @@ export class CategoriesService {
     return await this.categoryRepository.save(category);
   }
   
-  async update(id: number, user: Partial<Category>): Promise<Category> {
-    await this.categoryRepository.update(id, user);
+  async update(id: number, category: Partial<Category>): Promise<Category> {
+    await this.categoryRepository.update(id, category);
     return this.categoryRepository.findOne({ where: { id } });
   }
 
