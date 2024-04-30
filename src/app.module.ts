@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
+import { ProductsModule } from './products/products.module';
 
 
 @Module({
@@ -18,7 +19,8 @@ import { Category } from './categories/entities/category.entity';
       entities: [User, Category],
     }),
     UsersModule,
-    CategoriesModule],
+    CategoriesModule,
+    ProductsModule],
   controllers: [AppController],
   providers: [AppService],
 })
