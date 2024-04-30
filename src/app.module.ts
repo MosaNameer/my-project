@@ -8,6 +8,7 @@ import { User } from './users/entities/user.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
 import { ProductsModule } from './products/products.module';
+import { Product } from './products/entities/product.entity';
 
 
 @Module({
@@ -16,7 +17,7 @@ import { ProductsModule } from './products/products.module';
       type: 'sqlite',
       database: 'db/sql',
       synchronize: true,
-      entities: [User, Category],
+      entities: [User, Category, Product],
     }),
     UsersModule,
     CategoriesModule,
