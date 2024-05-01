@@ -28,9 +28,12 @@ export class ProductsService {
 
   async update(updateProductDto: UpdateProductDto, productId: number): Promise<Product> {
     const product = await this.findOne(productId);
-    return await this.productRepository.save({ ...product, ...updateProductDto });
-  }
 
+    const category = await this.categoryRepository.findOne({ where: { id: updateProductDto.category } });
+    if (!category)
+      throw new BadRequestException('Category not found');
+    return await this.productRepository.save({ ...product, ...updateProductDto, category });
+  }
 
   findAll(categoryId?: number): Promise<Product[]> {
     return this.productRepository.find({
@@ -49,11 +52,11 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    const product = this.productRepository.findOne({ 
+    const product = this.productRepository.findOne({
       where: { id },
-      relations: { category: true },  
-     });
-     
+      relations: { category: true },
+    });
+
     if (!product) {
       throw new NotFoundException('Product not found');
     }
