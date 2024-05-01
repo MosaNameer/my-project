@@ -26,17 +26,9 @@ export class ProductsService {
     return product;
   }
 
-  async update(updateProductDto: UpdateProductDto, categoryId: number): Promise<Product> {
-    const category = await this.categoryRepository.findOneBy({ id: categoryId });
-    if (!category)
-      throw new BadRequestException('Category not found');
-
-    const product = this.productRepository.create({
-      ...updateProductDto,
-      category
-    });
-    await this.productRepository.save(product);
-    return product;
+  async update(updateProductDto: UpdateProductDto, productId: number): Promise<Product> {
+    const product = await this.findOne(productId);
+    return await this.productRepository.save({ ...product, ...updateProductDto });
   }
 
 
@@ -57,7 +49,11 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    const product = this.productRepository.findOne({ where: { id } });
+    const product = this.productRepository.findOne({ 
+      where: { id },
+      relations: { category: true },  
+     });
+     
     if (!product) {
       throw new NotFoundException('Product not found');
     }

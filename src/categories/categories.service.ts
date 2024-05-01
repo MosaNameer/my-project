@@ -29,9 +29,9 @@ export class CategoriesService {
     return await this.categoryRepository.save(category);
   }
   
-  async update(id: number, category: Partial<Category>): Promise<Category> {
-    await this.categoryRepository.update(id, category);
-    return this.categoryRepository.findOne({ where: { id } });
+  async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+    const category = await this.findOne(id);
+    return await this.categoryRepository.save({ ...category, ...updateCategoryDto });
   }
 
   async remove(id: number): Promise<Category> {
