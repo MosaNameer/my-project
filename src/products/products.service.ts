@@ -13,11 +13,10 @@ export class ProductsService {
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
   ) { }
 
-  async create(createProductDto: CreateProductDto, categoryId: number): Promise<Product> {
-    const category = await this.categoryRepository.findOneBy({ id: categoryId });
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    const category = await this.categoryRepository.findOne({ where: { id: createProductDto.category } });
     if (!category)
       throw new BadRequestException('Category not found');
-
     const product = this.productRepository.create({
       ...createProductDto,
       category

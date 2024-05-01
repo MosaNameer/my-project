@@ -21,10 +21,10 @@ export class ProductsController {
   findAllByCategory(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findAllByCategory(id);
   }
-  
-  @Post(':id')
-  create(@Body() createProductDto: CreateProductDto, @Param('id',ParseIntPipe) id: number) {
-    return this.productsService.create(createProductDto, id);
+
+  @Post()
+  create(@Body() createProductDto: CreateProductDto ) {
+    return this.productsService.create(createProductDto);
   }
 
   @Patch(':id')

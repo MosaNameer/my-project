@@ -20,4 +20,8 @@ export class CreateProductDto {
     @IsNotEmpty({ message: 'Field quantity must be added' })
     @IsInt()
     quantity: number;
+
+    @IsNotEmpty({ message: 'Field category must be added' })
+    @IsInt()
+    category: number;
 }
