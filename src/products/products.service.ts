@@ -40,8 +40,20 @@ export class ProductsService {
   }
 
 
-  findAll(): Promise<Product[]> {
-    return this.productRepository.find();
+  findAll(categoryId?: number): Promise<Product[]> {
+    return this.productRepository.find({
+      where: { category: categoryId ? { id: categoryId } : undefined },
+      relations: { category: true },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        category: {
+          id: true,
+          name: true
+        }
+      }
+    });
   }
 
   findOne(id: number) {
@@ -52,11 +64,15 @@ export class ProductsService {
     return product;
   }
 
-  // update(id: number, updateProductDto: UpdateProductDto) {
-  //   return `This action updates a #${id} product`;
-  // }
+  async findAllByCategory(categoryId: number): Promise<Product[]> {
+    const category = await this.categoryRepository.findOne({ where: { id: categoryId } });
+    if (!category)
+      throw new BadRequestException('Category not found');
+    return this.findAll(categoryId)
+  }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number): Promise<Product> {
+    const product = await this.findOne(id);
+    return await this.productRepository.remove(product);
   }
 }

@@ -13,10 +13,15 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.findOne(id);
   }
 
+  @Get('category/:id')
+  findAllByCategory(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.findAllByCategory(id);
+  }
+  
   @Post(':id')
   create(@Body() createProductDto: CreateProductDto, @Param('id',ParseIntPipe) id: number) {
     return this.productsService.create(createProductDto, id);
