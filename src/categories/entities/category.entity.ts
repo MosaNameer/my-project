@@ -1,22 +1,23 @@
 import { SharedEntity } from "src/database/shared.entity";
 import { Product } from "src/products/entities/product.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
-
+import { Column, Entity, Index, OneToMany , Relation } from "typeorm";
+ 
 @Entity('categories')
-export class Category{
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @Column({name: 'name', length: 100, nullable: false})
+export class Category extends SharedEntity {
+
+    @Column({length: 100 })
     name: string;
     
-    
-    @Column({ name: 'imageUrl', nullable: false })
+    @Column()
     imageUrl: string;
 
-    @Column({ name: 'description', length: 100, nullable: false })
-    description: string;
+    @Column({ nullable: true })
+    description?: string;
 
-    @OneToMany(() => Product, product => product.category)
+    @Index()
+    @Column({ type: 'boolean', default: true , comment: 'Is the category active?'})
+    isActive: boolean
+
+    @OneToMany(() => Product, product => product.category, { cascade: true })
     products: Relation<Product[]>;
 }

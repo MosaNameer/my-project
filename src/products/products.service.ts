@@ -5,32 +5,31 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { Category } from 'src/categories/entities/category.entity';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+
+    private readonly categoriesService: CategoriesService
   ) { }
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
-    const category = await this.categoryRepository.findOne({ where: { id: createProductDto.category } });
-    if (!category)
-      throw new BadRequestException('Category not found');
-    const product = this.productRepository.create({
-      ...createProductDto,
+  async create(dto: CreateProductDto): Promise<Product> {
+    const category = await this.categoriesService.findOne(dto.category)
+    
+    return await this.productRepository.create({
+      ...dto,
       category
-    });
-    await this.productRepository.save(product);
-    return product;
+    }).save()
   }
 
   async update(updateProductDto: UpdateProductDto, productId: number): Promise<Product> {
     const product = await this.findOne(productId);
 
-    const category = await this.categoryRepository.findOne({ where: { id: updateProductDto.category } });
-    if (!category)
-      throw new BadRequestException('Category not found');
+    const category = await this.categoriesService.findOne(updateProductDto.category)
+      
     return await this.productRepository.save({ ...product, ...updateProductDto, category });
   }
 
@@ -50,8 +49,8 @@ export class ProductsService {
     });
   }
 
-  findOne(id: number) {
-    const product = this.productRepository.findOne({
+  async findOne(id: number) {
+    const product = await this.productRepository.findOne({
       where: { id },
       relations: { category: true },
     });
@@ -69,8 +68,8 @@ export class ProductsService {
     return this.findAll(categoryId)
   }
 
-  async remove(id: number): Promise<Product> {
+  async remove(id: number): Promise<any> {
     const product = await this.findOne(id);
-    return await this.productRepository.remove(product);
+    return await this.productRepository.softDelete(product.id);
   }
 }

@@ -1,17 +1,17 @@
 import { BaseEntity, CreateDateColumn, DeleteDateColumn, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export abstract class SharedEntity extends BaseEntity {
-    @Index({ unique: true})
+    @Index({ unique: true })
     @PrimaryGeneratedColumn()
     id: number;
 
-    @CreateDateColumn({ type: 'timestamptz' })
+    @CreateDateColumn({ type: 'date' })
     createdAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamptz' })
+    @UpdateDateColumn({ type: 'date' })
     updatedAt: Date;
 
-    @DeleteDateColumn({ type: 'timestamptz' })
+    @DeleteDateColumn({ type: 'date' })
     deletedAt: Date;
 
 }

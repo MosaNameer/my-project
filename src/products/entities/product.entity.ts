@@ -1,24 +1,26 @@
 import { Category } from "src/categories/entities/category.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { SharedEntity } from "src/database/shared.entity";
+import { Column, Entity, Index, ManyToOne, Relation } from "typeorm";
 @Entity('Products')
-export class Product {
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Product extends SharedEntity {
 
-    @Column({name: 'name', length: 100, nullable: false})
+    @Column({ length: 100 })
     name: string;
     
-    
-    @Column({ name: 'imageUrl', nullable: false })
+    @Column()
     imageUrl: string;
 
-    @Column({ name: 'description', length: 100, nullable: false })
-    description: string;
+    @Column({ type:'varchar', length: 100, nullable: true })
+    description?: string;
 
-    @Column({ name: 'price', nullable: false })
+    @Column({ type: 'real' })
     price: number;
 
-    @Column({ name: 'quantity', nullable: false })
+    @Index()
+    @Column({ type: 'boolean', default: true , comment: 'Is the product active?'})
+    isActive: boolean
+
+    @Column({ type: 'int' })
     quantity: number;
 
     @ManyToOne(() => Category, category => category.products)

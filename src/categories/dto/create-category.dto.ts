@@ -1,10 +1,14 @@
-import { IsNotEmpty, IsString, IsInt, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
 export class CreateCategoryDto {
-    @IsNotEmpty({ message: 'Field name must be added' })
+    @IsNotEmpty()
     @IsString()
     name: string;
-    
-    @IsNotEmpty({ message: 'Field description must be added' })
+
+    @IsOptional()
     @IsString()
     description: string;
+
+    @IsNotEmpty()
+    @IsString()
+    imageUrl: string
 }
