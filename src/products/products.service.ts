@@ -21,9 +21,11 @@ export class ProductsService {
 
   async create(dto: CreateProductDto): Promise<Product> {
     const category = await this.categoriesService.findOne(dto.category);
+    const tags = await this.tagsService.findByIds(dto.tags);
     return await this.productRepository.create({
       ...dto,
       category,
+      tags
     }).save();
   }
 
@@ -31,14 +33,14 @@ export class ProductsService {
     const product = await this.findOne(productId);
 
     const category = await this.categoriesService.findOne(updateProductDto.category)
-      
-    return await this.productRepository.save({ ...product, ...updateProductDto, category });
+    const tags = await this.tagsService.findByIds(updateProductDto.tags);
+    return await this.productRepository.save({ ...product, ...updateProductDto, category, tags });
   }
 
   findAll(categoryId?: number): Promise<Product[]> {
     return this.productRepository.find({
       where: { category: categoryId ? { id: categoryId } : undefined },
-      relations: { category: true, tags: true},
+      relations: { category: true, tags: true },
       select: {
         id: true,
         name: true,
@@ -58,7 +60,20 @@ export class ProductsService {
   async findOne(id: number) {
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: { category: true, tags: true},
+      relations: { category: true, tags: true },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        category: {
+          id: true,
+          name: true
+        },
+        tags: {
+          id: true,
+          name: true
+        }
+      }
     });
 
     if (!product) {
