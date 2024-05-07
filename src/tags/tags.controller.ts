@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { Tag } from './entities/tag.entity';
 
 @Controller('tags')
 export class TagsController {
-  constructor(private readonly tagsService: TagsService) {}
+  constructor(private readonly tagsService: TagsService) { }
 
   @Get()
   findAll() {
@@ -31,5 +32,14 @@ export class TagsController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.tagsService.remove(id);
   }
-  
+
+  // @Post('findByIds')
+  // findByIds(@Body() ids: number[]) {
+  //   return this.tagsService.findByIds(ids);
+  // }
+
+  @Post('findByIds')
+  async findByIds(@Body('ids') ids: number[]): Promise<Tag[]> {
+    return this.tagsService.findByIds(ids);
+  }
 }
