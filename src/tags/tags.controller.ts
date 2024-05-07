@@ -39,7 +39,7 @@ export class TagsController {
   // }
 
   @Post('findByIds')
-  async findByIds(@Body('ids') ids: number[]): Promise<Tag[]> {
+  findByIds(@Body('ids') ids: number[]): Promise<Tag[]> {
     return this.tagsService.findByIds(ids);
   }
 }
