@@ -28,20 +28,24 @@ export class CategoriesService {
     return category;
   }
 
-  private async sleep(s: number = 1): Promise<unknown> {
-    return new Promise(resolve => {
-      setTimeout(resolve, s * 1000)
-      console.log('Sleeping for', s, 'seconds')
-    });
-  }
+  // private async sleep(s: number = 1): Promise<unknown> {
+  //   return new Promise(resolve => {
+  //     setTimeout(resolve, s * 1000)
+  //     console.log('Sleeping for', s, 'seconds')
+  //   });
+  // }
 
   async create(dto: CreateCategoryDto): Promise<Category> {
     return await this.categoryRepository.create(dto).save();
   }
 
-  async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<any> {
+  async update(id: number, dto: UpdateCategoryDto): Promise<any> {
     const category = await this.findOne(id);
-    return await this.categoryRepository.save({ ...category, ...updateCategoryDto });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+    
+    return await this.categoryRepository.save({ ...category, ...dto });
   }
 
   async remove(id: number): Promise<string> {

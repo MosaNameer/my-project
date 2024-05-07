@@ -14,7 +14,8 @@ import { TagsModule } from './tags/tags.module';
       type: 'sqlite',
       database: 'db/sql',
       synchronize: true,
-      autoLoadEntities: true
+      // autoLoadEntities: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
     }),
     UsersModule,
     CategoriesModule,

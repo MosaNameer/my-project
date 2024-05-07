@@ -13,5 +13,4 @@ export abstract class SharedEntity extends BaseEntity {
 
     @DeleteDateColumn({ type: 'date' })
     deletedAt: Date;
-
 }

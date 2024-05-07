@@ -6,23 +6,25 @@ import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { Category } from 'src/categories/entities/category.entity';
 import { CategoriesService } from 'src/categories/categories.service';
+import { TagsService } from 'src/tags/tags.service';
+import { Tag } from 'src/tags/entities/tag.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
-
-    private readonly categoriesService: CategoriesService
+    @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+    private readonly categoriesService: CategoriesService,
+    private readonly tagsService: TagsService
   ) { }
 
   async create(dto: CreateProductDto): Promise<Product> {
-    const category = await this.categoriesService.findOne(dto.category)
-    
+    const category = await this.categoriesService.findOne(dto.category);
     return await this.productRepository.create({
       ...dto,
-      category
-    }).save()
+      category,
+    }).save();
   }
 
   async update(updateProductDto: UpdateProductDto, productId: number): Promise<Product> {
@@ -36,12 +38,16 @@ export class ProductsService {
   findAll(categoryId?: number): Promise<Product[]> {
     return this.productRepository.find({
       where: { category: categoryId ? { id: categoryId } : undefined },
-      relations: { category: true },
+      relations: { category: true, tags: true},
       select: {
         id: true,
         name: true,
         price: true,
         category: {
+          id: true,
+          name: true
+        },
+        tags: {
           id: true,
           name: true
         }
@@ -52,7 +58,7 @@ export class ProductsService {
   async findOne(id: number) {
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: { category: true },
+      relations: { category: true, tags: true},
     });
 
     if (!product) {

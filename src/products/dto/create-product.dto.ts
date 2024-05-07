@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsInt, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsString, IsInt, IsPositive, IsArray } from 'class-validator';
 export class CreateProductDto {
 
     @IsNotEmpty({ message: 'Field name must be added' })
@@ -24,4 +24,7 @@ export class CreateProductDto {
     @IsNotEmpty({ message: 'Field category must be added' })
     @IsInt()
     category: number;
+
+    // @IsArray()
+    // tags: number[];
 }

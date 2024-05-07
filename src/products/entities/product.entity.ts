@@ -1,7 +1,7 @@
 import { Category } from "src/categories/entities/category.entity";
 import { SharedEntity } from "src/database/shared.entity";
 import { Tag } from "src/tags/entities/tag.entity";
-import { Column, Entity, Index, ManyToMany, ManyToOne, Relation } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, Relation } from "typeorm";
 @Entity('Products')
 export class Product extends SharedEntity {
 
@@ -27,7 +27,8 @@ export class Product extends SharedEntity {
     @ManyToOne(() => Category, category => category.products)
     category: Relation<Category>;
 
-    // @ManyToMany(() => Tag, tag => tag.products)
-    // tags: Tag[];
+    @ManyToMany(() => Tag, tag => tag.products)
+    @JoinTable()
+    tags: Tag[];
 }
 

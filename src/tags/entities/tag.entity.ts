@@ -8,10 +8,10 @@ export class Tag extends SharedEntity{
     name: string;
 
     @Index()
-    @Column({ type: 'boolean', default: true , comment: 'Is the tag active?'})
+    @Column({ type: 'boolean', default: true , comment: 'Is the product active?'})
     isActive: boolean
 
-    // @ManyToMany(() => Product, product => product.tags)
-    // products: Product[];
+    @ManyToMany(() => Product, product => product.tags)
+    products: Product[];
 
 }
