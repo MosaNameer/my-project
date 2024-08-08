@@ -31,7 +31,6 @@ export class ProductsService {
 
   async update(updateProductDto: UpdateProductDto, productId: number): Promise<Product> {
     const product = await this.findOne(productId);
-
     const category = await this.categoriesService.findOne(updateProductDto.category)
     const tags = await this.tagsService.findByIds(updateProductDto.tags);
     return await this.productRepository.save({ ...product, ...updateProductDto, category, tags });
@@ -57,7 +56,7 @@ export class ProductsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id },
       relations: { category: true, tags: true },

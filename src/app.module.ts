@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { TagsModule } from './tags/tags.module';
+import { ModifiersModule } from './modifiers/modifiers.module';
 
 
 @Module({
@@ -20,7 +21,8 @@ import { TagsModule } from './tags/tags.module';
     UsersModule,
     CategoriesModule,
     ProductsModule,
-    TagsModule],
+    TagsModule,
+    ModifiersModule],
   controllers: [AppController],
   providers: [AppService],
 })
